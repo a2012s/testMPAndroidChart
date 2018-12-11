@@ -230,7 +230,9 @@ public class MainActivity extends AppCompatActivity {
         lineDataSet.setDrawCircleHole(true);//true空心,false实心;
         lineDataSet.setCircleRadius(3f);
         //lineDataSet.setc
-        lineDataSet.setCircleColor(getResources().getColor(R.color.yellow_bg));
+        lineDataSet.setCircleColor(getResources().getColor(R.color.yellow_bg));//折点文字
+
+        lineDataSet.setDrawValues(false);////不显示数值
 
         lineDataSet.setValueTextColor(getResources().getColor(R.color.font3));
         //设置显示值的字体大小
@@ -252,6 +254,8 @@ public class MainActivity extends AppCompatActivity {
         Description mDescription = new Description();
         mDescription.setText("");
         lineChartWeek.setDescription(mDescription);
+
+        lineChartWeek.setMarker(new ChartMarkerView(this, R.layout.layout, "f:", "数值："));
 
 
         //是否缩放Y轴
