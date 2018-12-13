@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private Legend legend;              //图例
     private LimitLine limitLine;        //限制线
     List<VtDateValueBean> dateValueList;
+    int barNum=5;
 
 
     List<String> mListWeek = new ArrayList<>();
@@ -70,25 +71,17 @@ public class MainActivity extends AppCompatActivity {
 
         initBarChart(mBarChart);
 
-        //setHightLimitLine
-
-//        BarChartBean barChartBean = LocalJsonAnalyzeUtil.JsonToObject(this,
-//                "bar_chart.json", BarChartBean.class);
 
 
-        dateValueList = new ArrayList<>();
+        setBarChart(barNum);
 
-        for (int i = 0; i < 30; i++) {
-
-            VtDateValueBean mVtDateValueBean = new VtDateValueBean();
-            mVtDateValueBean.setfValue(1 + i);
-            dateValueList.add(mVtDateValueBean);
-        }
-
-
-        Collections.reverse(dateValueList);//将集合 逆序排列，转换成需要的顺序
-
-        showBarChart(dateValueList, "净资产收益率（%）", getResources().getColor(R.color.yellow_bg));
+        bt_change_zhu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                barNum++;
+                setBarChart(barNum);
+            }
+        });
 
 
         bt_change.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +116,22 @@ public class MainActivity extends AppCompatActivity {
         setMonthData();
 
 
+    }
+
+    private void setBarChart(int num) {
+        dateValueList = new ArrayList<>();
+
+        for (int i = 0; i < num; i++) {
+
+            VtDateValueBean mVtDateValueBean = new VtDateValueBean();
+            mVtDateValueBean.setfValue(1 + i);
+            dateValueList.add(mVtDateValueBean);
+        }
+
+
+       // Collections.reverse(dateValueList);//将集合 逆序排列，转换成需要的顺序
+
+        showBarChart(dateValueList, "净资产收益率（%）", getResources().getColor(R.color.yellow_bg));
     }
 
 
@@ -304,6 +313,7 @@ public class MainActivity extends AppCompatActivity {
         BarData data = new BarData(barDataSet);
 
         mBarChart.setData(data);
+        mBarChart.invalidate();
     }
 
 
