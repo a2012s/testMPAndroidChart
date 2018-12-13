@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private Legend legend;              //图例
     private LimitLine limitLine;        //限制线
     List<VtDateValueBean> dateValueList;
-    int barNum=5;
+    int barNum = 5;
 
 
     List<String> mListWeek = new ArrayList<>();
@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         initBarChart(mBarChart);
 
 
-
         setBarChart(barNum);
 
         bt_change_zhu.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 barNum--;
                 setBarChart(barNum);
+                if (barNum == 0) {
+                    barNum = 5;
+                }
             }
         });
 
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-       // Collections.reverse(dateValueList);//将集合 逆序排列，转换成需要的顺序
+        // Collections.reverse(dateValueList);//将集合 逆序排列，转换成需要的顺序
 
         showBarChart(dateValueList, "净资产收益率（%）", getResources().getColor(R.color.yellow_bg));
     }
@@ -253,8 +255,6 @@ public class MainActivity extends AppCompatActivity {
 //        legend.setDrawInside(true);
 
 
-
-
     }
 
     /**
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
      * @param color      柱状图颜色
      */
     private void initBarDataSet(BarDataSet barDataSet, int color) {
-        barDataSet.setColor(color,50);////设置直方图的颜色
+        barDataSet.setColor(color, 50);////设置直方图的颜色
 
 
         barDataSet.setHighLightColor(color);//设置点击之后显示的颜色
@@ -277,8 +277,7 @@ public class MainActivity extends AppCompatActivity {
 //            });
 
 
-
-       // barDataSet.set
+        // barDataSet.set
         barDataSet.setFormLineWidth(1f);
         barDataSet.setFormSize(15.f);
         //是否显示柱状图顶部值
@@ -316,8 +315,8 @@ public class MainActivity extends AppCompatActivity {
         mBarChart.setData(data);
 
 
-        if(dateValueList.isEmpty()||dateValueList.size()==0){
-            Toast.makeText(MainActivity.this,"你还没有记录数据",Toast.LENGTH_LONG).show();
+        if (dateValueList.isEmpty() || dateValueList.size() == 0) {
+            // Toast.makeText(MainActivity.this,"你还没有记录数据",Toast.LENGTH_LONG).show();
             mBarChart.clear();
             mBarChart.setNoDataText("您还没有记录数据");
             mBarChart.setNoDataTextColor(Color.BLACK);
