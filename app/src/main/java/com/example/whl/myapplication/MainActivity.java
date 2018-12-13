@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         Collections.reverse(dateValueList);//将集合 逆序排列，转换成需要的顺序
 
-        showBarChart(dateValueList, "净资产收益率（%）", getResources().getColor(R.color.blue));
+        showBarChart(dateValueList, "净资产收益率（%）", getResources().getColor(R.color.yellow_bg));
 
 
         bt_change.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +241,10 @@ public class MainActivity extends AppCompatActivity {
 //        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
 //        //是否绘制在图表里面
 //        legend.setDrawInside(true);
+
+
+
+
     }
 
     /**
@@ -250,7 +254,21 @@ public class MainActivity extends AppCompatActivity {
      * @param color      柱状图颜色
      */
     private void initBarDataSet(BarDataSet barDataSet, int color) {
-        barDataSet.setColor(color);
+        barDataSet.setColor(color,50);////设置直方图的颜色
+
+
+        barDataSet.setHighLightColor(color);//设置点击之后显示的颜色
+
+//        barDataSet.setColors(new int[]{//第一个颜色会从顶部开始显示
+//                    Color.parseColor("#00CDCD"),
+//                    Color.parseColor("#00EEEE"),
+//                    Color.parseColor("#00FFFF"),
+//                    Color.parseColor("#3398DB")
+//            });
+
+
+
+       // barDataSet.set
         barDataSet.setFormLineWidth(1f);
         barDataSet.setFormSize(15.f);
         //是否显示柱状图顶部值
@@ -408,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
                     ss = mListWeek.get((int) value);
                 } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
-                    ss = "ha";
+                    ss = " ";
                 }
 
 
