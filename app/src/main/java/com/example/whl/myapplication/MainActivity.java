@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * 初始化BarChart图表
+     * 初始化BarChart图表（柱形图）
      */
     private void initBarChart(BarChart barChart) {
         /***图表设置***/
@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
         leftAxis = barChart.getAxisLeft();
         leftAxis.setDrawGridLines(true);//设置横状的线是否显示
+
         leftAxis.enableGridDashedLine(6f, 3f, 0);//虚线
         leftAxis.setAxisLineWidth(1f);
         leftAxis.setEnabled(false);////显示true 或 隐藏false 左边轴和数字
@@ -224,6 +225,10 @@ public class MainActivity extends AppCompatActivity {
         rightAxis.setAxisMinimum(0f);
 
         barChart.setDoubleTapToZoomEnabled(false); // 设置为false以禁止通过在其上双击缩放图表。
+
+
+        barChart.setMarker(new ChartMarkerView(this, R.layout.layout, "f:", "数值："));
+
         // mBarChart.setBorderWidth(15);//设置边界宽度
 
         /***折线图例 标签 设置***/
@@ -249,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         barDataSet.setFormLineWidth(1f);
         barDataSet.setFormSize(15.f);
         //是否显示柱状图顶部值
-        barDataSet.setDrawValues(true);
+        barDataSet.setDrawValues(false);///是否显示文字数值
         // barDataSet.setValueTextSize(10f);
 //        barDataSet.setValueTextColor(color);
     }
@@ -352,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
         //lineDataSet.setc
         lineDataSet.setCircleColor(getResources().getColor(R.color.yellow_bg));//折点文字
 
-        lineDataSet.setDrawValues(false);////不显示数值
+        lineDataSet.setDrawValues(false);////是否显示文字数值
 
         lineDataSet.setValueTextColor(getResources().getColor(R.color.font3));
         //设置显示值的字体大小

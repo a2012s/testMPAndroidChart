@@ -26,7 +26,7 @@ public class ChartMarkerView extends MarkerView {
      */
     public ChartMarkerView(Context context, int layoutResource, String item, String unit) {
         super(context, layoutResource);
-        tv_indicator = (TextView) findViewById(R.id.tv_indicator);
+        tv_indicator =  findViewById(R.id.tv_indicator);
         this.item = null == item ? "" : item;
         this.unit = null == unit ? "" : unit;
     }
