@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.whl.myapplication.bean.VtDateValueBean;
 import com.github.mikephil.charting.animation.Easing;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         bt_change_zhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                barNum++;
+                barNum--;
                 setBarChart(barNum);
             }
         });
@@ -313,6 +314,16 @@ public class MainActivity extends AppCompatActivity {
         BarData data = new BarData(barDataSet);
 
         mBarChart.setData(data);
+
+
+        if(dateValueList.isEmpty()||dateValueList.size()==0){
+            Toast.makeText(MainActivity.this,"你还没有记录数据",Toast.LENGTH_LONG).show();
+            mBarChart.clear();
+            mBarChart.setNoDataText("您还没有记录数据");
+            mBarChart.setNoDataTextColor(Color.BLACK);
+        }
+
+        mBarChart.notifyDataSetChanged();
         mBarChart.invalidate();
     }
 
