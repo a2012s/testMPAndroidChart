@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
         initBarChart(mBarChart);
 
+        //setHightLimitLine
+
 //        BarChartBean barChartBean = LocalJsonAnalyzeUtil.JsonToObject(this,
 //                "bar_chart.json", BarChartBean.class);
 
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     isWeek = false;
                     setMonthData();
 
+
                     lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
                     lineChartWeek.invalidate(); // refresh
                 } else {
@@ -117,6 +120,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * 设置高限制线
+     *
+     * @param high
+     * @param name
+     */
+    public void setHightLimitLine(float high, String name, int color) {
+        if (name == null) {
+            name = "高限制线";
+        }
+        LimitLine hightLimit = new LimitLine(high, name);
+        hightLimit.setLineWidth(2f);
+        hightLimit.setTextSize(10f);
+        hightLimit.setLineColor(color);
+        hightLimit.setTextColor(color);
+        leftAxis.addLimitLine(hightLimit);
+        lineChartWeek.invalidate();
+    }
+
+
     /**
      * 初始化BarChart图表
      */
@@ -132,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         //显示边框/边界
         barChart.setDrawBorders(false);
         //设置动画效果
-         barChart.animateY(1000, Easing.EasingOption.Linear);
+        barChart.animateY(1000, Easing.EasingOption.Linear);
         barChart.animateX(1000, Easing.EasingOption.Linear);
 
         //图表描述
@@ -149,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
         legend.setDrawInside(false);
 
 
-
-
         /***XY轴的设置***/
         //X轴设置显示位置在底部
         xAxis = barChart.getXAxis();
@@ -158,7 +180,8 @@ public class MainActivity extends AppCompatActivity {
         xAxis.setGranularity(1f);//设置最小的区间，避免标签的迅速增多
         xAxis.setDrawGridLines(false);//设置竖状的线是否显示
         xAxis.setCenterAxisLabels(true);//设置标签居中
-        xAxis.setAxisMinimum(0f);
+        xAxis.setAxisMinimum(-0.5f);
+
         xAxis.setGranularity(1f);
 
         leftAxis = barChart.getAxisLeft();
@@ -203,9 +226,9 @@ public class MainActivity extends AppCompatActivity {
         barDataSet.setColor(color);
         barDataSet.setFormLineWidth(1f);
         barDataSet.setFormSize(15.f);
-        //不显示柱状图顶部值
-        barDataSet.setDrawValues(false);
-//        barDataSet.setValueTextSize(10f);
+        //是否显示柱状图顶部值
+        barDataSet.setDrawValues(true);
+        // barDataSet.setValueTextSize(10f);
 //        barDataSet.setValueTextColor(color);
     }
 
@@ -221,6 +244,11 @@ public class MainActivity extends AppCompatActivity {
         }
         // 每一个BarDataSet代表一类柱状图
         BarDataSet barDataSet = new BarDataSet(entries, name);
+        //barDataSet.setColor(colours.get(i));
+        //barDataSet.setValueTextColor(colours.get(i));
+        barDataSet.setValueTextSize(10f);
+        barDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
+
         initBarDataSet(barDataSet, color);
 
 //        // 添加多个BarDataSet时
@@ -229,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
 //        BarData data = new BarData(dataSets);
 
         BarData data = new BarData(barDataSet);
+
         mBarChart.setData(data);
     }
 
@@ -335,6 +364,9 @@ public class MainActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴的位置（默认在上方）：
         xAxis.setGranularity(1f);//设置X轴坐标之间的最小间隔（因为此图有缩放功能，X轴,Y轴可设置可缩放）
         //xAxis.setLabelCount(12, true);
+        xAxis.setDrawGridLines(false);//设置竖状的线是否显示
+        xAxis.setCenterAxisLabels(true);//设置标签居中
+
         xAxis.setDrawAxisLine(false);
         xAxis.setGridColor(getResources().getColor(R.color.transparent));
         xAxis.setTextColor(getResources().getColor(R.color.font2));
