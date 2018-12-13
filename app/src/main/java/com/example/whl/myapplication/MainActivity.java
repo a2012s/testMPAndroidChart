@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     setMonthData();
 
 
-                  //  setHightLimitLine(1.0f,null, getResources().getColor(R.color.red));
+                    //  setHightLimitLine(1.0f,null, getResources().getColor(R.color.red));
 
 
                     lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
@@ -184,17 +184,18 @@ public class MainActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f);//设置最小的区间，避免标签的迅速增多
         xAxis.setDrawGridLines(false);//设置竖状的线是否显示
-        xAxis.setCenterAxisLabels(true);//设置标签居中
+        xAxis.setCenterAxisLabels(false);//设置标签是否居中
         xAxis.setAxisMinimum(-0.5f);
 
         xAxis.setGranularity(1f);
 
+        // xAxis.set
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 String ss = "";
                 try {
-                    ss = "10."+dateValueList.get((int) value).getfValue();
+                    ss = "10." + dateValueList.get((int) value).getfValue();
                 } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
                     ss = " ";
@@ -375,7 +376,6 @@ public class MainActivity extends AppCompatActivity {
         lineChartWeek.setDescription(mDescription);
 
 
-
         lineChartWeek.setMarker(new ChartMarkerView(this, R.layout.layout, "f:", "数值："));
 
 
@@ -388,7 +388,7 @@ public class MainActivity extends AppCompatActivity {
         xAxis.setGranularity(1f);//设置X轴坐标之间的最小间隔（因为此图有缩放功能，X轴,Y轴可设置可缩放）
         //xAxis.setLabelCount(12, true);
         xAxis.setDrawGridLines(false);//设置竖状的线是否显示
-        xAxis.setCenterAxisLabels(true);//设置标签居中
+        xAxis.setCenterAxisLabels(false);//设置标签是否居中
 
         xAxis.setDrawAxisLine(false);
         xAxis.setGridColor(getResources().getColor(R.color.transparent));
