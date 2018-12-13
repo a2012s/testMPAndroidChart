@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
      * @param name
      */
     public void setHightLimitLine(float high, String name, int color) {
-        if (name == null) {
+        if (TextUtils.isEmpty(name)) {
             name = "高限制线";
         }
         LimitLine hightLimit = new LimitLine(high, name);
@@ -154,8 +155,10 @@ public class MainActivity extends AppCompatActivity {
         hightLimit.setTextSize(10f);
         hightLimit.setLineColor(color);
         hightLimit.setTextColor(color);
+        // 获得左侧侧坐标轴
+        YAxis leftAxis = lineChartWeek.getAxisLeft();
         leftAxis.addLimitLine(hightLimit);
-        lineChartWeek.invalidate();
+       // lineChartWeek.invalidate();
     }
 
 
@@ -182,8 +185,9 @@ public class MainActivity extends AppCompatActivity {
 
         //折线图例 标签 设置
         Legend legend = barChart.getLegend();
-        legend.setForm(Legend.LegendForm.SQUARE);//图示 标签的形状。   正方形
+        legend.setForm(Legend.LegendForm.SQUARE);//图示 标签的形状。
         legend.setTextSize(11f);
+        legend.setEnabled(false);//是否显示
         //显示位置
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
@@ -199,8 +203,12 @@ public class MainActivity extends AppCompatActivity {
         xAxis.setDrawGridLines(false);//设置竖状的线是否显示
         xAxis.setCenterAxisLabels(false);//设置标签是否居中
         xAxis.setAxisMinimum(-0.5f);
-
         xAxis.setGranularity(1f);
+
+
+
+
+
 
         // xAxis.set
         xAxis.setValueFormatter(new IAxisValueFormatter() {
@@ -298,7 +306,9 @@ public class MainActivity extends AppCompatActivity {
             entries.add(barEntry);
         }
         // 每一个BarDataSet代表一类柱状图
+
         BarDataSet barDataSet = new BarDataSet(entries, name);
+      //  barDataSet.setLabel("");
         //barDataSet.setColor(colours.get(i));
         //barDataSet.setValueTextColor(colours.get(i));
         barDataSet.setValueTextSize(10f);
@@ -421,8 +431,11 @@ public class MainActivity extends AppCompatActivity {
 
         YAxis leftYAxis = lineChartWeek.getAxisLeft();
         YAxis rightYAxis = lineChartWeek.getAxisRight();
-        rightYAxis.setEnabled(false); //右侧Y轴不显示
-        leftYAxis.setEnabled(false);
+        rightYAxis.setEnabled(false); //右侧Y轴是否显示
+        leftYAxis.setEnabled(false); //左侧Y轴是否显示
+
+
+
 
         showLineChartView();
     }
@@ -471,6 +484,11 @@ public class MainActivity extends AppCompatActivity {
         lineChartWeek.setData(data);
 
         setHightLimitLine(1.0f, null, Color.RED);
+
+
+
+
+
         lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
         lineChartWeek.invalidate(); // refresh
     }
