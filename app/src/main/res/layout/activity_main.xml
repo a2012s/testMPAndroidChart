@@ -13,7 +13,15 @@
         android:id="@+id/bt_change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="改变" />
+        android:text="折线图 改变" />
+
+
+    <Button
+        android:id="@+id/bt_change_zhu"
+        android:layout_toRightOf="@+id/bt_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="柱形图 改变" />
 
 
 
@@ -23,6 +31,15 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@+id/bt_change"
+        android:background="@color/white" />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/lineChartWeek"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="13dp"
         android:background="@color/white" />
 
 
