@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        setMonthData();
+        initChartView();
+
         bt_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,25 +101,24 @@ public class MainActivity extends AppCompatActivity {
                 if (isWeek) {
                     isWeek = false;
                     setMonthData();
+                    showLineChartView();
 
 
                     //  setHightLimitLine(1.0f,null, getResources().getColor(R.color.red));
 
 
-                    lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
-                    lineChartWeek.invalidate(); // refresh
                 } else {
                     isWeek = true;
                     setWeekData();
+                    showLineChartView();
 
-                    //setHightLimitLine(0.0f,null, getResources().getColor(R.color.red));
-                    lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
-                    lineChartWeek.invalidate(); // refresh
+//                    //setHightLimitLine(0.0f,null, getResources().getColor(R.color.red));
+//                    lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
+//                    lineChartWeek.invalidate(); // refresh
 
                 }
             }
         });
-        setMonthData();
 
 
     }
@@ -130,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
             mVtDateValueBean.setfValue(1 + i);
             dateValueList.add(mVtDateValueBean);
         }
-
 
         // Collections.reverse(dateValueList);//将集合 逆序排列，转换成需要的顺序
 
@@ -343,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        initChartView();
+        // initChartView();
 
     }
 
@@ -351,7 +352,6 @@ public class MainActivity extends AppCompatActivity {
      * 周折线图
      */
     private void setWeekData() {
-
         //lineChartWeek.setDrawBorders(true); //显示边界
         //设置数据
         for (int i = 0; i < 7; i++) {
@@ -363,59 +363,21 @@ public class MainActivity extends AppCompatActivity {
                 entriesWeek.add(new Entry(i, 0));
             }
         }
-        initChartView();
+        //  initChartView();
 
     }
 
+    /**
+     * 初始化折线图
+     */
     private void initChartView() {
-        //一个LineDataSet就是一条线
-        lineDataSet = new LineDataSet(entriesWeek, "时长");
-        // lineDataSet.clear();
-        //线颜色
-        lineDataSet.setColor(getResources().getColor(R.color.gray_e6));
-        //线宽度
-        lineDataSet.setLineWidth(2f);
-
-        if (Utils.getSDKInt() >= 18) {
-            // fill drawable only supported on api level 18 and above
-            Drawable drawable = ContextCompat.getDrawable(MainActivity.this, R.drawable.bg_zhexian);
-            lineDataSet.setFillDrawable(drawable);
-        } else {
-            lineDataSet.setFillColor(Color.YELLOW);
-        }
-        //设置折线图填充
-        lineDataSet.setDrawFilled(true);
-
-        //设置折线图填充
-        //lineDataSet.setDrawFilled(true);
-
-        //设置曲线值的圆点是实心还是空心
-        lineDataSet.setDrawCircleHole(true);//true空心,false实心;
-        lineDataSet.setCircleRadius(3f);
-        //lineDataSet.setc
-        lineDataSet.setCircleColor(getResources().getColor(R.color.yellow_bg));//折点文字
-
-        lineDataSet.setDrawValues(false);////是否显示文字数值
-
-        lineDataSet.setValueTextColor(getResources().getColor(R.color.font3));
-        //设置显示值的字体大小
-        lineDataSet.setValueTextSize(12f);
-        //线模式为圆滑曲线（默认折线）
-        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-
-
-        data = new LineData(lineDataSet);
-        lineChartWeek.setData(data);
-
 
         lineChartWeek.getLegend().setEnabled(false);
 
 //        lineChartWeek.setHighlightPerDragEnabled(false);
 //        lineChartWeek.setHighlightPerTapEnabled(false);
-
-
         Description mDescription = new Description();
-        mDescription.setText("");
+        mDescription.setText("得分记录（分数）");
         lineChartWeek.setDescription(mDescription);
 
 
@@ -461,5 +423,55 @@ public class MainActivity extends AppCompatActivity {
         YAxis rightYAxis = lineChartWeek.getAxisRight();
         rightYAxis.setEnabled(false); //右侧Y轴不显示
         leftYAxis.setEnabled(false);
+
+        showLineChartView();
+    }
+
+    /**
+     * 显示折线图
+     */
+    private void showLineChartView() {
+        //一个LineDataSet就是一条线
+        lineDataSet = new LineDataSet(entriesWeek, "时长");
+        // lineDataSet.clear();
+        //线颜色
+        lineDataSet.setColor(getResources().getColor(R.color.gray_e6));
+        //线宽度
+        lineDataSet.setLineWidth(2f);
+
+        if (Utils.getSDKInt() >= 18) {
+            // fill drawable only supported on api level 18 and above
+            Drawable drawable = ContextCompat.getDrawable(MainActivity.this, R.drawable.bg_zhexian);
+            lineDataSet.setFillDrawable(drawable);
+        } else {
+            lineDataSet.setFillColor(Color.YELLOW);
+        }
+        //设置折线图填充
+        lineDataSet.setDrawFilled(true);
+
+        //设置折线图填充
+        //lineDataSet.setDrawFilled(true);
+
+        //设置曲线值的圆点是实心还是空心
+        lineDataSet.setDrawCircleHole(true);//true空心,false实心;
+        lineDataSet.setCircleRadius(3f);
+        //lineDataSet.setc
+        lineDataSet.setCircleColor(getResources().getColor(R.color.yellow_bg));//折点文字
+
+        lineDataSet.setDrawValues(false);////是否显示文字数值
+
+        lineDataSet.setValueTextColor(getResources().getColor(R.color.font3));
+        //设置显示值的字体大小
+        lineDataSet.setValueTextSize(12f);
+        //线模式为圆滑曲线（默认折线）
+        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
+
+        data = new LineData(lineDataSet);
+        lineChartWeek.setData(data);
+
+        setHightLimitLine(1.0f, null, Color.RED);
+        lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
+        lineChartWeek.invalidate(); // refresh
     }
 }
