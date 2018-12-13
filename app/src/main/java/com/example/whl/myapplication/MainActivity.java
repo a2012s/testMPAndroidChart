@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private XAxis xAxis;                //X轴
     private Legend legend;              //图例
     private LimitLine limitLine;        //限制线
+    List<VtDateValueBean> dateValueList;
 
 
     List<String> mListWeek = new ArrayList<>();
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 //                "bar_chart.json", BarChartBean.class);
 
 
-        List<VtDateValueBean> dateValueList = new ArrayList<>();
+        dateValueList = new ArrayList<>();
 
         for (int i = 0; i < 30; i++) {
 
@@ -103,12 +104,16 @@ public class MainActivity extends AppCompatActivity {
                     setMonthData();
 
 
+                  //  setHightLimitLine(1.0f,null, getResources().getColor(R.color.red));
+
+
                     lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
                     lineChartWeek.invalidate(); // refresh
                 } else {
                     isWeek = true;
                     setWeekData();
 
+                    //setHightLimitLine(0.0f,null, getResources().getColor(R.color.red));
                     lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
                     lineChartWeek.invalidate(); // refresh
 
@@ -184,11 +189,27 @@ public class MainActivity extends AppCompatActivity {
 
         xAxis.setGranularity(1f);
 
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                String ss = "";
+                try {
+                    ss = "10."+dateValueList.get((int) value).getfValue();
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    ss = " ";
+                }
+
+
+                return ss; //mList为存有月份的
+            }
+        });
+
         leftAxis = barChart.getAxisLeft();
         leftAxis.setDrawGridLines(true);//设置横状的线是否显示
         leftAxis.enableGridDashedLine(6f, 3f, 0);//虚线
         leftAxis.setAxisLineWidth(1f);
-        leftAxis.setEnabled(true);////显示true 或 隐藏false 左边轴和数字
+        leftAxis.setEnabled(false);////显示true 或 隐藏false 左边轴和数字
         leftAxis.setGridColor(0xacb3e5fc);
         //   leftAxis.setTextColor(0xb3e5fc);//设置左边Y轴文字的颜色
         //   leftAxis.setAxisLineColor(0xb3e5fc);//设置左边Y轴的颜色
@@ -352,6 +373,8 @@ public class MainActivity extends AppCompatActivity {
         Description mDescription = new Description();
         mDescription.setText("");
         lineChartWeek.setDescription(mDescription);
+
+
 
         lineChartWeek.setMarker(new ChartMarkerView(this, R.layout.layout, "f:", "数值："));
 
