@@ -167,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initBarChart(BarChart barChart) {
         /***图表设置***/
+
+
         //背景颜色
         barChart.setBackgroundColor(Color.WHITE);
         //不显示图表网格
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         barChart.animateX(1000, Easing.EasingOption.Linear);
 
         //图表描述
-        barChart.getDescription().setText("");
+        barChart.getDescription().setText("单词个数");
 
         //折线图例 标签 设置
         Legend legend = barChart.getLegend();
@@ -247,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
 
         barChart.setDoubleTapToZoomEnabled(false); // 设置为false以禁止通过在其上双击缩放图表。
 
+        //barChart.set
 
         barChart.setMarker(new ChartMarkerView(this, R.layout.layout, "f:", "数值："));
 
@@ -364,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
     private void setWeekData() {
         //lineChartWeek.setDrawBorders(true); //显示边界
         //设置数据
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 0; i++) {
             //entriesWeek.add(new Entry(i, (float) (Math.random()) * 80));
             mListWeek.add("10.0" + i);
             if (i == 1) {
@@ -485,7 +488,12 @@ public class MainActivity extends AppCompatActivity {
 
         setHightLimitLine(1.0f, null, Color.RED);
 
-
+        if (entriesWeek.isEmpty() || entriesWeek.size() == 0) {
+            // Toast.makeText(MainActivity.this,"你还没有记录数据",Toast.LENGTH_LONG).show();
+            lineChartWeek.clear();
+            lineChartWeek.setNoDataText("您还没有记录数据");
+            lineChartWeek.setNoDataTextColor(Color.BLACK);
+        }
 
 
 
