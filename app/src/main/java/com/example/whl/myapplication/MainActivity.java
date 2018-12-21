@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -28,7 +29,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 
 import java.util.ArrayList;
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button bt_change, bt_change_zhu;
     LineChart lineChartWeek;
+    ChartMarkerView mChartMarkerView;
 
 
     private BarChart mBarChart;
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Legend legend;              //图例
     private LimitLine limitLine;        //限制线
     List<VtDateValueBean> dateValueList;
-    int barNum = 5;
+    int barNum = 30;
 
 
     List<String> mListWeek = new ArrayList<>();
@@ -82,14 +87,14 @@ public class MainActivity extends AppCompatActivity {
                 barNum--;
                 setBarChart(barNum);
                 if (barNum == 0) {
-                    barNum = 5;
+                    barNum = 30;
                 }
             }
         });
 
 
+        initLineChartView();
         setMonthData();
-        initChartView();
 
         bt_change.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 if (isWeek) {
                     isWeek = false;
                     setMonthData();
-                    showLineChartView();
 
 
                     //  setHightLimitLine(1.0f,null, getResources().getColor(R.color.red));
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     isWeek = true;
                     setWeekData();
-                    showLineChartView();
+
 
 //                    //setHightLimitLine(0.0f,null, getResources().getColor(R.color.red));
 //                    lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
@@ -128,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         dateValueList = new ArrayList<>();
 
         for (int i = 0; i < num; i++) {
-
             VtDateValueBean mVtDateValueBean = new VtDateValueBean();
             mVtDateValueBean.setfValue(1 + i);
             dateValueList.add(mVtDateValueBean);
@@ -158,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         // 获得左侧侧坐标轴
         YAxis leftAxis = lineChartWeek.getAxisLeft();
         leftAxis.addLimitLine(hightLimit);
-       // lineChartWeek.invalidate();
+        // lineChartWeek.invalidate();
     }
 
 
@@ -185,6 +188,8 @@ public class MainActivity extends AppCompatActivity {
         //图表描述
         barChart.getDescription().setText("单词个数");
 
+        //barChart.setse
+
         //折线图例 标签 设置
         Legend legend = barChart.getLegend();
         legend.setForm(Legend.LegendForm.SQUARE);//图示 标签的形状。
@@ -206,10 +211,6 @@ public class MainActivity extends AppCompatActivity {
         xAxis.setCenterAxisLabels(false);//设置标签是否居中
         xAxis.setAxisMinimum(-0.5f);
         xAxis.setGranularity(1f);
-
-
-
-
 
 
         // xAxis.set
@@ -249,9 +250,10 @@ public class MainActivity extends AppCompatActivity {
 
         barChart.setDoubleTapToZoomEnabled(false); // 设置为false以禁止通过在其上双击缩放图表。
 
+
         //barChart.set
 
-        barChart.setMarker(new ChartMarkerView(this, R.layout.layout, "f:", "数值："));
+        barChart.setMarker(new ChartMarkerView(this, R.layout.chart_text_layout, "f:", "数值："));
 
         // mBarChart.setBorderWidth(15);//设置边界宽度
 
@@ -279,7 +281,14 @@ public class MainActivity extends AppCompatActivity {
         barDataSet.setColor(color, 50);////设置直方图的颜色
 
 
+        //barDataSet.setBarBorderWidth(50f);
+
         barDataSet.setHighLightColor(color);//设置点击之后显示的颜色
+        // barDataSet.setHighLightColor(Color.RED);//设置点击之后显示的颜色
+
+
+        // barDataSet.
+
 
 //        barDataSet.setColors(new int[]{//第一个颜色会从顶部开始显示
 //                    Color.parseColor("#00CDCD"),
@@ -289,7 +298,6 @@ public class MainActivity extends AppCompatActivity {
 //            });
 
 
-        // barDataSet.set
         barDataSet.setFormLineWidth(1f);
         barDataSet.setFormSize(15.f);
         //是否显示柱状图顶部值
@@ -300,7 +308,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void showBarChart(List<VtDateValueBean> dateValueList, String name, int color) {
         ArrayList<BarEntry> entries = new ArrayList<>();
-        for (int i = 0; i < dateValueList.size(); i++) {
+
+        int dateValueListSize = dateValueList.size();
+        for (int i = 0; i < dateValueListSize; i++) {
             /**
              * 此处还可传入Drawable对象 BarEntry(float x, float y, Drawable icon)
              * 即可设置柱状图顶部的 icon展示
@@ -311,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
         // 每一个BarDataSet代表一类柱状图
 
         BarDataSet barDataSet = new BarDataSet(entries, name);
-      //  barDataSet.setLabel("");
+        //  barDataSet.setLabel("");
         //barDataSet.setColor(colours.get(i));
         //barDataSet.setValueTextColor(colours.get(i));
         barDataSet.setValueTextSize(10f);
@@ -319,12 +329,17 @@ public class MainActivity extends AppCompatActivity {
 
         initBarDataSet(barDataSet, color);
 
+
 //        // 添加多个BarDataSet时
 //        ArrayList<IBarDataSet> dataSets = new ArrayList<>();
 //        dataSets.add(barDataSet);
 //        BarData data = new BarData(dataSets);
 
         BarData data = new BarData(barDataSet);
+        if (dateValueListSize < 5) {
+            data.setBarWidth(0.15f * dateValueListSize);//设置柱体宽度
+        }
+
 
         mBarChart.setData(data);
 
@@ -336,8 +351,15 @@ public class MainActivity extends AppCompatActivity {
             mBarChart.setNoDataTextColor(Color.BLACK);
         }
 
+
+        //mBarChart.set
         mBarChart.notifyDataSetChanged();
         mBarChart.invalidate();
+
+        Highlight highlight1 = new Highlight(6.0f, 0.0f, 0);//主要是x轴，就认x的值，y值默认0就好
+        // Highlight highlight2 = new Highlight(9.0f, 9.0f, 0);
+        // mBarChart.highlightValues(new Highlight[]{highlight1, highlight2});
+        mBarChart.highlightValue(highlight1);//设置一进来的时候就显示MarkView
     }
 
 
@@ -357,7 +379,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // initChartView();
+        showLineChartView();
+
 
     }
 
@@ -367,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
     private void setWeekData() {
         //lineChartWeek.setDrawBorders(true); //显示边界
         //设置数据
-        for (int i = 0; i < 0; i++) {
+        for (int i = 0; i < 7; i++) {
             //entriesWeek.add(new Entry(i, (float) (Math.random()) * 80));
             mListWeek.add("10.0" + i);
             if (i == 1) {
@@ -383,7 +406,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 初始化折线图
      */
-    private void initChartView() {
+    private void initLineChartView() {
 
         lineChartWeek.getLegend().setEnabled(false);
 
@@ -394,7 +417,46 @@ public class MainActivity extends AppCompatActivity {
         lineChartWeek.setDescription(mDescription);
 
 
-        lineChartWeek.setMarker(new ChartMarkerView(this, R.layout.layout, "f:", "数值："));
+        mChartMarkerView = new ChartMarkerView(this, R.layout.chart_text_layout, "f:", "数值：");
+
+
+        lineChartWeek.setMarker(mChartMarkerView);
+
+
+        //   lineChartWeek.getEntryByTouchPoint(1.0f,2.0f);
+
+        // lineChartWeek.getHighlightByTouchPoint(1.0f, 2.0f);
+
+        lineChartWeek.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                Log.e("logcat", "点击事件Entry=" + e.toString() + ";高亮Highlight=" + h.toString());
+
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+                Log.e("logcat", "onNothingSelected");
+
+            }
+        });
+
+        //  setOnChartValueSelectedListener
+
+        lineChartWeek.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+        // lineChartWeek.select
 
 
         //是否缩放Y轴
@@ -438,8 +500,6 @@ public class MainActivity extends AppCompatActivity {
         leftYAxis.setEnabled(false); //左侧Y轴是否显示
 
 
-
-
         showLineChartView();
     }
 
@@ -465,6 +525,7 @@ public class MainActivity extends AppCompatActivity {
         //设置折线图填充
         lineDataSet.setDrawFilled(true);
 
+
         //设置折线图填充
         //lineDataSet.setDrawFilled(true);
 
@@ -484,20 +545,47 @@ public class MainActivity extends AppCompatActivity {
 
 
         data = new LineData(lineDataSet);
+
         lineChartWeek.setData(data);
+
 
         setHightLimitLine(1.0f, null, Color.RED);
 
-        if (entriesWeek.isEmpty() || entriesWeek.size() == 0) {
+        if (entriesWeek.isEmpty()) {
             // Toast.makeText(MainActivity.this,"你还没有记录数据",Toast.LENGTH_LONG).show();
             lineChartWeek.clear();
             lineChartWeek.setNoDataText("您还没有记录数据");
             lineChartWeek.setNoDataTextColor(Color.BLACK);
+        } else {
+
+//        Highlight mHighlight = new Highlight(0, 0);//new Highlight(1.0f, 2.0f, 0);
+//        Entry mEntry = new Entry(1.0f, 2.0f);
+//        lineChartWeek.highlightValue(mHighlight);
+
+            Highlight highlight1 = new Highlight(0.0f, 0.0f, 0);//只要是x轴，y默认是0就好。
+            // Highlight highlight2 = new Highlight(9.0f, 0.0f, 0);
+
+            Highlight[] highLight = new Highlight[1];
+            highLight[0] = highlight1;
+
+            lineChartWeek.highlightValues(highLight);//设置一进来的时候就显示MarkView
+
+            //lineChartWeek.highlightValue(highlight1);
         }
 
 
+//        if (mChartMarkerView != null) {
+        // mChartMarkerView.refreshContent(mEntry, mHighlight);
+        // mChartMarkerView.refreshDrawableState();
+
+        //lineChartWeek.getMarker().refreshContent(mEntry, mHighlight);
+//        }
 
         lineChartWeek.notifyDataSetChanged(); // let the chart know it's data changed
         lineChartWeek.invalidate(); // refresh
+
+
+        //lineChartWeek.getMarker().refreshContent(mEntry, mHighlight);
+
     }
 }
